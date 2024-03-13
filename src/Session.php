@@ -37,13 +37,13 @@ final class Session
             if ($isSameServer) return true;
             $headers = array_change_key_case(getallheaders());
             if (!array_key_exists("authorization", $headers)) {
-                throw new \Exception("No authorization found in the header.");
+                throw new \Exception("No authorization found in the header:\n" . var_dump($headers));
             }
             if (!substr($headers["authorization"], 0, 7) === "Bearer ") {
-                throw new \Exception("Authorization is present but no Bearer token found.");
+                throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $headers["authorization"]));
             }
             if ($headers['authorization'] !== $_SESSION["token"]) {
-                throw new \Exception("Bearer token doesn't match.");
+                throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $headers['authorization'], $_SESSION["token"]));
             }
             return true;
         } catch(\Exception $e) {
