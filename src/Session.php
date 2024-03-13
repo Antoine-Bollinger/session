@@ -30,25 +30,27 @@ final class Session
     public function isLoggedAndAuthorized(
         $isSameServer = false
     ) :bool {
-        if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
-            error_log("No userId or token in the session were found.");
+        try {
+            if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
+                throw new \Exception("No userId or token in the session were found.");
+            }
+            if ($isSameServer) return true;
+            $headers = array_change_key_case(getallheaders());
+            if (!array_key_exists("authorization", $headers)) {
+                throw new \Exception("No authorization found in the header.");
+            }
+            if (!substr($headers["authorization"], 0, 7) === "Bearer ") {
+                throw new \Exception("Authorization is present but no Bearer token found.");
+            }
+            if ($headers['authorization'] !== $_SESSION["token"]) {
+                throw new \Exception("Bearer token doesn't match.");
+            }
+            return true;
+        } catch(\Exception $e) {
+            error_log($e->getMessage());
+            echo $e->getMessage();
             return false;
         }
-        if ($isSameServer) return true;
-        $headers = array_change_key_case(getallheaders());
-        if (!array_key_exists("authorization", $headers)) {
-            error_log("No authorization found in the header.");
-            return false;
-        }
-        if (!substr($headers["authorization"], 0, 7) === "Bearer ") {
-            error_log("Authorization is present but no Bearer token found.");
-            return false;
-        }
-        if ($headers['authorization'] !== $_SESSION["token"]) {
-            error_log("Bearer token doesn't match.");
-            return false;
-        }
-        return true;
     }
 
     /**
