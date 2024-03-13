@@ -30,12 +30,24 @@ final class Session
     public function isLoggedAndAuthorized(
         $isSameServer = false
     ) :bool {
-        if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) return false;
+        if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
+            error_log("No userId or token in the session were found.");
+            return false;
+        }
         if ($isSameServer) return true;
         $headers = array_change_key_case(getallheaders());
-        if (!array_key_exists("authorization", $headers)) return false;
-        if (!substr($headers["authorization"], 0, 7) === "Bearer ") return false;
-        if ($headers['authorization'] !== $_SESSION["token"]) return false;
+        if (!array_key_exists("authorization", $headers)) {
+            error_log("No authorization found in the header.");
+            return false;
+        }
+        if (!substr($headers["authorization"], 0, 7) === "Bearer ") {
+            error_log("Authorization is present but no Bearer token found.");
+            return false;
+        }
+        if ($headers['authorization'] !== $_SESSION["token"]) {
+            error_log("Bearer token doesn't match.");
+            return false;
+        }
         return true;
     }
 
