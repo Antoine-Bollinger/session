@@ -30,6 +30,7 @@ final class Session
     public function isLoggedAndAuthorized(
         $isSameServer = false
     ) :bool {
+        echo $_SERVER["HTTP_AUTHORIZATION"];
         try {
             if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
                 throw new \Exception("No userId or token in the session were found.");
