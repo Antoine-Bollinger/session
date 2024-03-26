@@ -31,20 +31,22 @@ final class Session
         $isSameServer = false
     ) :bool {
         try {
-            if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
-                throw new \Exception("No userId or token in the session were found.");
-            }
-            if ($isSameServer) return true;
-            $headers = array_change_key_case(getallheaders());
-            $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
-            if (!$authorization) {
-                throw new \Exception("No authorization found in the header.");
-            }
-            if (!substr($authorization, 0, 7) === "Bearer ") {
-                throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $authorization));
-            }
-            if ($authorization !== $_SESSION["token"]) {
-                throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $authorization, $_SESSION["token"]));
+            if ($isSameServer) {
+                if (!isset($_SESSION["userId"]) || !isset($_SESSION["token"])) {
+                    throw new \Exception("No userId or token in the session were found.");
+                }
+            } else {
+                $headers = array_change_key_case(getallheaders());
+                $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
+                if (!$authorization) {
+                    throw new \Exception("No authorization found in the header.");
+                }
+                if (!substr($authorization, 0, 7) === "Bearer ") {
+                    throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $authorization));
+                }
+                if ($authorization !== $_SESSION["token"]) {
+                    throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $authorization, $_SESSION["token"]));
+                }
             }
             return true;
         } catch(\Exception $e) {
