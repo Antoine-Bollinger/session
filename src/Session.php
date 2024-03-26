@@ -39,7 +39,7 @@ final class Session
                 }
             } else {
                 $headers = array_change_key_case(getallheaders());
-                $id = $headers("X-Client-ID") ?? null;
+                $id = $headers["x-client-id"] ?? null;
                 $token = $this->db->getTokenFromDatabase($id);
                 $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
                 if (!$authorization) {

@@ -25,7 +25,15 @@ final class SQLite
         $id,
         $token
     ) {
-        $statement = $this->db->prepare("INSERT INTO tokens (id, token) VALUES (:id, :token)");
+        $statement = $this->db->prepare("SELECT * FROM tokens WHERE id = :id");
+        $statement->bindParam(":id", $id, SQLITE3_INTEGER);
+        $result = $statement->execute();
+        $user = $result->fetchArray(SQLITE3_ASSOC);
+        if ($user) {
+            $statement = $this->db->prepare("UPDATE tokens SET token = :token WHERE id = :id");
+        } else {
+            $statement = $this->db->prepare("INSERT INTO tokens (id, token) VALUES (:id, :token)");
+        }
         $statement->bindParam(":id", $id, SQLITE3_INTEGER);
         $statement->bindParam(":token", $token, SQLITE3_TEXT);
         $statement->execute();
