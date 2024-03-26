@@ -17,8 +17,8 @@ final class SQLite
     private function init(
 
     ) {
-        $this->db = new SQLite3($this->path);
-        $this->db->exec("CREATE TABLE IF NOT EXISTS tokens (id INTEGER PRIMARY KEY, token TEXT");
+        $this->db = new \SQLite3($this->path);
+        $this->db->exec("CREATE TABLE IF NOT EXISTS tokens (id INTEGER PRIMARY KEY, token TEXT)");
     }
 
     public function saveTokenToDatabase(
