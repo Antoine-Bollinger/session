@@ -42,8 +42,8 @@ final class Session
                 $id = $headers["x-client-id"] ?? null;
                 $token = $this->db->getTokenFromDatabase($id);
                 $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
-                if (!$authorization) {
-                    throw new \Exception("No authorization found in the header.");
+                if (!$authorization || !$id) {
+                    throw new \Exception("No authorization or x-client-id found in the header.");
                 }
                 if (!substr($authorization, 0, 7) === "Bearer ") {
                     throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $authorization));
