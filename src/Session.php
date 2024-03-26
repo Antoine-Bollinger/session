@@ -1,5 +1,5 @@
 <?php
-namespace ABollinger;
+namespace Abollinger;
 
 /**
  * Class Session
@@ -9,6 +9,7 @@ namespace ABollinger;
  */
 final class Session
 {
+    private $db;
     /**
      * Constructor for the Session class.
      *
@@ -17,6 +18,7 @@ final class Session
     public function __construct(
 
     ) {
+        $this->db = new SQLite();
         if (session_status() !== PHP_SESSION_ACTIVE) 
             session_start();
     }
@@ -37,6 +39,8 @@ final class Session
                 }
             } else {
                 $headers = array_change_key_case(getallheaders());
+                $id = $headers("X-Client-ID") ?? null;
+                $token = $this->db->getTokenFromDatabase($id);
                 $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
                 if (!$authorization) {
                     throw new \Exception("No authorization found in the header.");
@@ -44,8 +48,8 @@ final class Session
                 if (!substr($authorization, 0, 7) === "Bearer ") {
                     throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $authorization));
                 }
-                if ($authorization !== $_SESSION["token"]) {
-                    throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $authorization, $_SESSION["token"]));
+                if ($authorization !== $token) {
+                    throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $authorization, $token));
                 }
             }
             return true;
@@ -66,6 +70,10 @@ final class Session
     ) :void {
         $_SESSION["userId"] = $arr["userId"];
         $_SESSION["token"] = $arr["token"];
+        $this->db->saveTokenToDatabase(
+            $arr["userId"],
+            $arr["token"]
+        );
     }
 
     /**
@@ -74,10 +82,13 @@ final class Session
      * @return void
      */
     public function logout(
-
+        $arr
     ) :void {
         unset($_SESSION["userId"]);
         unset($_SESSION["token"]);
+        $this->db->deleteTokenFromDatabase(
+            $arr["userId"]
+        );
         session_destroy();
     }
 }  
