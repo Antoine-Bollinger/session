@@ -9,7 +9,11 @@ namespace Abollinger;
  */
 final class Session
 {
+    /**
+     * @var \SQLite3 $db The SQLite database connection object used for interacting with the database.
+     */
     private $db;
+
     /**
      * Constructor for the Session class.
      *
@@ -79,6 +83,7 @@ final class Session
     /**
      * Logs out the user by unsetting session variables and destroying the session.
      *
+     * @param array $arr An array containing user-specific data (userId)
      * @return void
      */
     public function logout(
