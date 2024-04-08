@@ -50,10 +50,10 @@ final class Session
                     throw new \Exception("No authorization or x-client-id found in the header.");
                 }
                 if (!substr($authorization, 0, 7) === "Bearer ") {
-                    throw new \Exception(sprintf("Authorization is present but no Bearer token found.\nAuthorization looks like: %s.", $authorization));
+                    throw new \Exception("Authorization is present but no Bearer token found.");
                 }
                 if ($authorization !== $token) {
-                    throw new \Exception(sprintf("Bearer token doesn't match.\nHeader's token: %s\nSession's token: %s", $authorization, $token));
+                    throw new \Exception("Bearer token doesn't match.");
                 }
             }
             return true;
