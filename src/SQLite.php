@@ -18,14 +18,10 @@ namespace Abollinger;
  */
 final class SQLite
 {
-    /**
-     * @var string $path THe path to the SQLite database file.
-     */
+    /** @var string $path THe path to the SQLite database file. */
     private string $path;
 
-    /**
-     * @var \SQLite3 $db The SQLite database connection object.
-     */
+    /** @var \SQLite3 $db The SQLite database connection object. */
     private \SQLite3 $db;
 
     /**

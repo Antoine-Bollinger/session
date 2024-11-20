@@ -18,8 +18,8 @@ namespace Abollinger;
  */
 final class Session
 {
-    /** @var \SQLite3 $db The SQLite database connection object used for interacting with the database. */
-    private \SQLite3 $db;
+    /** @var SQLite $db The SQLite database connection object used for interacting with the database. */
+    private SQLite $db;
 
     /**
      * Constructor for the Session class.
