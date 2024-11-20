@@ -2,7 +2,7 @@
 /*
  * This file is part of the Abollinger\Session package.
  *
- * (c) Antoine Bollinger <antoine.bollinger@gmail.com>
+ * (c) Antoine Bollinger <abollinger@partez.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,10 +18,8 @@ namespace Abollinger;
  */
 final class Session
 {
-    /**
-     * @var \SQLite3 $db The SQLite database connection object used for interacting with the database.
-     */
-    private $db;
+    /** @var \SQLite3 $db The SQLite database connection object used for interacting with the database. */
+    private \SQLite3 $db;
 
     /**
      * Constructor for the Session class.
@@ -40,10 +38,11 @@ final class Session
      * Checks if the user is logged in and authorized.
      *
      * @param bool $isSameServer Indicates if the request is from the same server (default: false)
+     * 
      * @return bool Returns true if the user is logged in and authorized; otherwise, false.
      */
     public function isLoggedAndAuthorized(
-        $isSameServer = false
+        bool $isSameServer = false
     ) :bool {
         try {
             if ($isSameServer) {
@@ -67,7 +66,7 @@ final class Session
             }
             return true;
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            error_log("🔥 " . $e->getMessage());
             return false;
         }
     }
@@ -76,10 +75,11 @@ final class Session
      * Logs in the user by setting session variables.
      *
      * @param array $arr An array containing user-specific data (userId, token)
+     * 
      * @return void
      */
     public function login(
-        $arr
+        array $arr
     ) :void {
         $_SESSION["userId"] = $arr["userId"];
         $_SESSION["token"] = $arr["token"];
@@ -93,10 +93,11 @@ final class Session
      * Logs out the user by unsetting session variables and destroying the session.
      *
      * @param array $arr An array containing user-specific data (userId)
+     * 
      * @return void
      */
     public function logout(
-        $arr
+        array $arr
     ) :void {
         unset($_SESSION["userId"]);
         unset($_SESSION["token"]);

@@ -11,8 +11,9 @@
     "authors": [
         {
             "name": "Antoine Bollinger",
-            "email": "antoine.bollinger@gmail.com"
+            "email": "abollinger@partez.net"
         }
     ],
-    "require": {}
+    "require": {},
+    "version": "v1.1.7"
 }

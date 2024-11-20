@@ -2,7 +2,7 @@
 /*
  * This file is part of the Abollinger\Session package.
  *
- * (c) Antoine Bollinger <antoine.bollinger@gmail.com>
+ * (c) Antoine Bollinger <abollinger@partez.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,12 +21,12 @@ final class SQLite
     /**
      * @var string $path THe path to the SQLite database file.
      */
-    private $path;
+    private string $path;
 
     /**
      * @var \SQLite3 $db The SQLite database connection object.
      */
-    private $db;
+    private \SQLite3 $db;
 
     /**
      * SQLite constructor.
@@ -34,7 +34,7 @@ final class SQLite
      * @param string $path Path to the SQLite database file.
      */
     public function __construct(
-        $path = __DIR__ . "/token.db"
+        string $path = __DIR__ . "/token.db"
     ) {
         $this->path = $path;
         $this->init();
@@ -45,7 +45,7 @@ final class SQLite
      */
     private function init(
 
-    ) {
+    ) :void {
         $this->db = new \SQLite3($this->path);
         $this->db->exec("CREATE TABLE IF NOT EXISTS tokens (id INTEGER PRIMARY KEY, token TEXT)");
     }
@@ -57,9 +57,9 @@ final class SQLite
      * @param string $token The token to be saved.
      */
     public function saveTokenToDatabase(
-        $id,
-        $token
-    ) {
+        string $id,
+        string $token
+    ) :void {
         $statement = $this->db->prepare("SELECT * FROM tokens WHERE id = :id");
         $statement->bindParam(":id", $id, SQLITE3_INTEGER);
         $result = $statement->execute();
@@ -82,8 +82,8 @@ final class SQLite
      * @return string|null The token associated with the ID, or null if not found.
      */
     public function getTokenFromDatabase(
-        $id
-    ) {
+        int $id
+    ) :string|null {
         $statement = $this->db->prepare("SELECT token FROM tokens WHERE id = :id");
         $statement->bindParam(":id", $id, SQLITE3_INTEGER);
         $result = $statement->execute();
@@ -97,8 +97,8 @@ final class SQLite
      * @param int $id The ID for which to delete the token.
      */
     public function deleteTokenFromDatabase(
-        $id
-    ) {
+        int $id
+    ) :void {
         $statement = $this->db->prepare("DELETE FROM tokens WHERE id = :id");
         $statement->bindParam(":id", $id, SQLITE3_INTEGER);
         $statement->execute();
