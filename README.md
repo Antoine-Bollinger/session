@@ -2,6 +2,7 @@
 
 **Abollinger\Session** is a PHP library designed to manage user session-related functionalities. It offers an easy-to-use interface for session management, user authentication, login, and logout processes, leveraging PHP's native session handling mechanisms and SQLite for token storage.
 
+
 ## Features
 
 - **Session Management**: Automatically initializes a session if not already active.
@@ -12,19 +13,28 @@
 
 - **Error Handling**: Logs errors for debugging and ensures secure exception handling.
 
+
 ## Requirements
 
 - PHP 7.4 or higher
 - SQLite3 extension enabled
 
+
 ## Installation
 
-Clone or download this repository and include the `Session` class in your project:
+You can install the **Abollinger\Session** package using Composer. Run the following command:
 
 ```php
-require_once 'path/to/Session.php';
+composer require abollinger/session
+```
+
+Then, include the Composer autoloader in your project:
+
+```php
+require_once 'vendor/autoload.php';
 use Abollinger\Session;
 ```
+
 
 ## Usage
 
@@ -66,6 +76,7 @@ $session->logout([
 ]);
 ```
 
+
 ## API Reference
 
 ### Constructor
@@ -100,6 +111,7 @@ Description: Logs out a user by removing session variables, deleting the token f
 
 - Parameters:
     - `$arr` (array): Contains `userId`.
+
 
 ## Example Workflow
 
@@ -137,9 +149,11 @@ $session->logout([
 ]);
 ```
 
+
 ## Licence 
 
 This library is licensed under the MIT License. For full license details, see the `LICENCE` file distributed with this source code.
+
 
 ## Author
 
