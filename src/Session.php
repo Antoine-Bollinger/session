@@ -52,7 +52,6 @@ final class Session
             } else {
                 $headers = array_change_key_case(getallheaders());
                 $id = $headers["x-client-id"] ?? null;
-                $token = $this->db->getTokenFromDatabase($id);
                 $authorization = $headers["authorization"] ?? $_SERVER["HTTP_AUTHORIZATION"] ?? $_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"] ?? null; 
                 if (!$authorization || !$id) {
                     throw new \Exception("No authorization or x-client-id found in the header.");
@@ -60,6 +59,7 @@ final class Session
                 if (!substr($authorization, 0, 7) === "Bearer ") {
                     throw new \Exception("Authorization is present but no Bearer token found.");
                 }
+                $token = $this->db->getTokenFromDatabase($id);
                 if ($authorization !== $token) {
                     throw new \Exception("Bearer token doesn't match.");
                 }
